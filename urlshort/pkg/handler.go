@@ -8,13 +8,8 @@ import (
 )
 
 type PathToUrl struct {
-	Path string `yaml:"path"`
-	Url  string `yaml:"url"`
-}
-
-type JSON struct {
-	Path string `json:"path"`
-	Url  string `json:"url"`
+	Path string `yaml:"path" json:"path"`
+	Url  string `yaml:"url" json:"url"`
 }
 
 // MapHandler will return an http.HandlerFunc (which also
@@ -61,6 +56,15 @@ func YAMLHandler(yml []byte, fallback http.Handler) (http.HandlerFunc, error) {
 	return MapHandler(pathMap, fallback), nil
 }
 
+func JSONHandler(jsn []byte, fallback http.Handler) (http.HandlerFunc, error) {
+	parsedJson, err := parseJson(jsn)
+	if err != nil {
+		return nil, err
+	}
+	pathMap := buildMap(parsedJson)
+	return MapHandler(pathMap, fallback), nil
+}
+
 func parseYaml(yml []byte) ([]PathToUrl, error) {
 	var parsed []PathToUrl
 	err := yaml.Unmarshal(yml, &parsed)
@@ -79,7 +83,13 @@ func buildMap(paths []PathToUrl) map[string]string {
 	return m
 }
 
-func parseJson(data []byte) ([]JSON, error) {
-	var paresedJson []JSON
-	err := json.Unm
+func parseJson(data []byte) ([]PathToUrl, error) {
+	var parsedJson PathToUrl
+	var paths []PathToUrl
+	err := json.Unmarshal(data, &parsedJson)
+	if err != nil {
+		return nil, err
+	}
+	paths = append(paths, parsedJson)
+	return paths, nil
 }
