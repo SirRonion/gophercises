@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{ .Title }}</title>
+    <style>
+      body {
+        background-color: whitesmoke;
+      }
+
+      h1 {
+        font-size: 3rem;
+        color: #d73b2a;
+      }
+
+      .story-content {
+        border: 2px black solid;
+        background-color: #f0f8ff;
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 10px;
+      }
+
+      .links {
+        border: 2px black solid;
+        background-color: #f0f8ff;
+        font-family: fantasy;
+        margin-top: 10px;
+        padding: 5px;
+      }
+
+      a {
+        text-decoration: none;
+        color: blueviolet;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>{{ .Title }}</h1>
+    <div class="story-content">
+      {{ range .Story }}
+      <p>{{ . }}</p>
+      {{ end }}
+    </div>
+    <div class="links">
+      <ul>
+        {{ range .Options }}
+        <li>
+          <a href="{{ .Arc }}"><strong>{{ .Text }}</strong></a>
+        </li>
+        {{ else }}
+        <li><strong>The end!</strong></li>
+        {{ end }}
+      </ul>
+    </div>
+  </body>
+</html>
